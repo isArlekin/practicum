@@ -2,7 +2,7 @@ const readline = require('readline');
 const ioInterface = readline.createInterface({ input: process.stdin });
 
 const inputLines = [];
-let currentLine = 0;
+let currentLine = 1; // skip first line because `n` isn't used
 
 ioInterface.on('line', line => {
   inputLines.push(line);
@@ -10,82 +10,60 @@ ioInterface.on('line', line => {
 
 ioInterface.on('close', solve);
 
-// 0 1 2 3 4 5 6 7 8
-
-// 1 0 2 3 0 4 5 0 6
-// firstZero - 1
-// 1 0 1 2 0 1 2 0 1
-// firstZero - 7
-// 1 0 1 1 0 1 1 0 1
 function solve() {
-  const n = readNumber();
-  // const nums = readNumberArr();
-  // const zeroIndexes = findAllZeros(nums);
-  const [nums, zeroIndexes] = readArrAndCountZeros();
-  const firstZeroIndex = zeroIndexes.keys().next().value;
+  const nums = readNumberArr();
+  let firstZeroIndex = findFirstZero(nums);
+  let firstEndZeroIndex = findFirstEndZero(nums);
+  const isMoreThanOneZero = firstZeroIndex !== firstEndZeroIndex;
   const result = [];
 
   for (let i = 0; i < nums.length; i++) {
     if (nums[i] === 0) {
       result.push(0);
       if (i !== firstZeroIndex) {
-        zeroIndexes.delete(firstZeroIndex);
+        firstZeroIndex = i;
       }
     } else {
-      result.push(findNearest(zeroIndexes, i));
+      result.push(Math.abs(firstZeroIndex - i));
+    }
+  }
+
+  if (isMoreThanOneZero) {
+    for (let i = nums.length - 1; i > -1; i--) {
+      if (nums[i] === 0 && i !== firstEndZeroIndex) {
+        firstEndZeroIndex = i;
+      } else {
+        const distance = Math.abs(firstEndZeroIndex - i);
+        if (result[i] > distance) {
+          result[i] = distance;
+        }
+      }
     }
   }
 
   print(result.join(' '));
 }
 
-function findNearest(zeroIndexes, index) {
-  let min = Number.MAX_SAFE_INTEGER;
-
-  for (const zeroIndex of zeroIndexes) {
-    const temp = Math.abs(zeroIndex - index);
-    if (temp < min) {
-      min = temp;
-    }
-    if (min === 1) {
-      break;
-    }
-  }
-
-  return min;
-}
-
-function readArrAndCountZeros() {
-  const indexes = new Set();
-  const nums = readLine()
-    .split(' ')
-    .map((n, i) => {
-      if (n === '0') {
-        indexes.add(i);
-      }
-      return Number(n);
-    });
-  return [nums, indexes];
-}
-
-function findAllZeros(nums) {
-  const indexes = new Set();
+function findFirstZero(nums) {
   for (let i = 0; i < nums.length; i++) {
     if (nums[i] === 0) {
-      indexes.add(i);
+      return i;
     }
   }
-  return indexes;
+}
+
+function findFirstEndZero(nums) {
+  for (let i = nums.length - 1; i > -1; i--) {
+    if (nums[i] === 0) {
+      return i;
+    }
+  }
 }
 
 function readNumberArr() {
   return readLine()
     .split(' ')
     .map(n => Number(n));
-}
-
-function readNumber() {
-  return Number(readLine());
 }
 
 function readLine() {
