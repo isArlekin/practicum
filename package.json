@@ -4,7 +4,7 @@
   "main": "template.js",
   "scripts": {
     "start": "node aPlusB/index.js",
-    "test": "jest",
+    "test": "jest --watchAll",
     "prettier": "prettier -w -l ./**/*.js",
     "precommit": "lint-staged",
     "prepare": "husky install"

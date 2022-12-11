@@ -52,18 +52,31 @@ describe('BuggerQueue', () => {
   it('should return number of elements in queue', () => {
     const queue = new BufferQueue(3);
 
-    expect(queue.size).toBe(0);
+    expect(queue.size()).toBe(0);
 
     queue.push(3);
     queue.push(2);
 
     queue.pop();
 
-    expect(queue.size).toBe(1);
+    expect(queue.size()).toBe(1);
   });
 
   it('should return null if pop method is called when the queue is empty', () => {
     const queue = new BufferQueue(3);
     expect(queue.pop()).toBe(null);
+  });
+
+  it('should return element at the top of the queue not removing it', () => {
+    const queue = new BufferQueue(3);
+
+    expect(queue.peek()).toBe(null);
+
+    queue.push(3);
+    queue.push(2);
+
+    expect(queue.peek()).toBe(3);
+    queue.pop();
+    expect(queue.peek()).toBe(2);
   });
 });
