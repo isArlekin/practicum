@@ -1,4 +1,6 @@
 class Deque {
+  static ERROR = 'error';
+
   constructor(maxSize) {
     this.maxSize = maxSize;
     this.size = 0;
@@ -9,7 +11,7 @@ class Deque {
 
   push_front(element) {
     if (this.is_full()) {
-      return 'error';
+      return Deque.ERROR;
     }
 
     this.head = (this.head - 1 + this.maxSize) % this.maxSize;
@@ -20,7 +22,7 @@ class Deque {
 
   push_back(element) {
     if (this.is_full()) {
-      return 'error';
+      return Deque.ERROR;
     }
 
     this.array[this.tail] = element;
@@ -30,7 +32,7 @@ class Deque {
 
   pop_front() {
     if (this.is_empty()) {
-      return 'error';
+      return Deque.ERROR;
     }
     const element = this.array[this.head];
     this.array[this.head] = undefined;
@@ -42,7 +44,7 @@ class Deque {
 
   pop_back() {
     if (this.is_empty()) {
-      return 'error';
+      return Deque.ERROR;
     }
     this.tail = (this.tail - 1 + this.maxSize) % this.maxSize;
     const element = this.array[this.tail];
