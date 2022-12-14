@@ -1,22 +1,21 @@
 const readline = require('readline');
-
-const reader = readline.createInterface({
-  input: process.stdin,
-});
+const ioInterface = readline.createInterface({ input: process.stdin });
 
 const inputLines = [];
 let currentLine = 0;
 
-reader.on('line', line => {
+ioInterface.on('line', line => {
   inputLines.push(line);
 });
 
-process.stdin.on('end', solve);
+ioInterface.on('close', solve);
 
-function getSum(a, b) {
-  return a + b;
+function solve() {}
+
+function readLine() {
+  return inputLines[currentLine++];
 }
 
-function solve() {
-  console.log(getSum(1, 2));
+function print(text) {
+  process.stdout.write(`${text}\n`);
 }
