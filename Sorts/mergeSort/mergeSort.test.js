@@ -10,10 +10,6 @@ describe('MergeSort', () => {
       expect(merge(arr1, 0, 1, 2)).toEqual([1, 4]);
       expect(merge(arr2, 0, 1, 2)).toEqual([1, 4]);
       expect(merge(arr3, 0, 1, 2)).toEqual([-1, 0]);
-
-      expect(arr1).toEqual([1, 4]);
-      expect(arr2).toEqual([1, 4]);
-      expect(arr3).toEqual([-1, 0]);
     });
 
     it('should sort an array of three elements', () => {
@@ -25,16 +21,10 @@ describe('MergeSort', () => {
       expect(merge(arr2, 0, 2, 3)).toEqual([0, 1, 4]);
       expect(merge(arr3, 0, 2, 3)).toEqual([-2, 0, 7]);
 
-      expect(arr1).toEqual([0, 1, 4]);
-      expect(arr2).toEqual([0, 1, 4]);
-      expect(arr3).toEqual([-2, 0, 7]);
-
       const arr4 = [1, 0, 4];
       const arr5 = [7, -7, -5];
       expect(merge(arr4, 0, 1, 3)).toEqual([0, 1, 4]);
       expect(merge(arr5, 0, 1, 3)).toEqual([-7, -5, 7]);
-      expect(arr4).toEqual([0, 1, 4]);
-      expect(arr5).toEqual([-7, -5, 7]);
     });
 
     it('should sort an array of four elements', () => {
@@ -47,9 +37,6 @@ describe('MergeSort', () => {
       expect(merge(arr2, 0, 2, 4)).toEqual([-1, 0, 1, 3]);
       expect(merge(arr3, 0, 2, 4)).toEqual([-8, -7, -3, -2]);
       expect(merge(arr4, 0, 2, 4)).toEqual([-999999999, -999999998, -999999997, -999999996]);
-
-      expect(arr1).toEqual([0, 1, 2, 4]);
-      expect(arr2).toEqual([-1, 0, 1, 3]);
     });
   });
 

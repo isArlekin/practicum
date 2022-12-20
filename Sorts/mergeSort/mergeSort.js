@@ -7,7 +7,12 @@ function merge_sort(arr, left, right) {
   merge_sort(arr, left, mid);
   merge_sort(arr, mid, right);
 
-  merge(arr, left, mid, right);
+  const result = merge(arr, left, mid, right);
+
+  let i = left;
+  for (const item of result) {
+    arr[i++] = item;
+  }
 }
 
 function merge(arr, left, mid, right) {
@@ -38,10 +43,6 @@ function merge(arr, left, mid, right) {
     k++;
   }
 
-  let i = left;
-  for (const item of result) {
-    arr[i++] = item;
-  }
   return result;
 }
 
