@@ -66,5 +66,40 @@ describe('MergeSort', () => {
       expect(arr4).toEqual([-7, 0, 8, 10]);
       expect(arr5).toEqual([0, 0, 0]);
     });
+
+    it('it should sort according to compare fun', () => {
+      const compare = (a, b) => a.value < b.value;
+      const arr1 = [
+        { id: 1, value: 3 },
+        { id: 2, value: 1 },
+      ];
+      const arr2 = [
+        { id: 3, value: 3 },
+        { id: 1, value: 2 },
+        { id: 2, value: 1 },
+      ];
+
+      merge_sort(arr1, 0, 2, compare);
+      merge_sort(arr2, 0, 3, compare);
+
+      expect(arr1).toEqual([
+        { id: 2, value: 1 },
+        { id: 1, value: 3 },
+      ]);
+      expect(arr2).toEqual([
+        { id: 2, value: 1 },
+        { id: 1, value: 2 },
+        { id: 3, value: 3 },
+      ]);
+    });
+
+    // it('sort should be stable', () => {
+    //   const compare = (a, b) => a.value < b.value;
+    //   const arr1 = [{ id: 1, value: 3 }, { id: 2, value: 3 }, { id: 3, value: 3 }, { id: 4, value: 1 }];
+    //
+    //   merge_sort(arr1, 0, arr1.length, compare);
+    //
+    //   expect(arr1).toEqual([{ id: 4, value: 1 }, { id: 1, value: 3 }, { id: 2, value: 3 }, { id: 3, value: 3 }]);
+    // });
   });
 });

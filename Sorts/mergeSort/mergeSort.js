@@ -1,4 +1,4 @@
-function merge_sort(arr, left, right) {
+function merge_sort(arr, left, right, compare = (a, b) => a < b) {
   if (right - left <= 1) {
     return;
   }
@@ -7,7 +7,7 @@ function merge_sort(arr, left, right) {
   merge_sort(arr, left, mid);
   merge_sort(arr, mid, right);
 
-  const result = merge(arr, left, mid, right);
+  const result = merge(arr, left, mid, right, compare);
 
   let i = left;
   for (const item of result) {
@@ -15,13 +15,13 @@ function merge_sort(arr, left, right) {
   }
 }
 
-function merge(arr, left, mid, right) {
+function merge(arr, left, mid, right, compare = (a, b) => a < b) {
   let l = left;
   let r = mid;
   let k = 0;
   const result = new Array(right - left);
   while (l < mid && r < right) {
-    if (arr[l] < arr[r]) {
+    if (compare(arr[l], arr[r])) {
       result[k] = arr[l];
       l++;
     } else {
