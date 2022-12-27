@@ -35,17 +35,13 @@ function findMaxKUniversityIds(ids, k) {
 
   mask = mask.filter(item => item.idx !== -1);
 
-  console.log('Mask - ', mask);
-
   const stableSort = (arr, compare) =>
     arr
       .map((item, index) => ({ item, index }))
       .sort((a, b) => compare(a.item, b.item) || a.index - b.index)
       .map(({ item }) => item);
 
-  const kSortedIds = stableSort(mask, (a, b) => a.value - b.value).slice(-k);
-
-  console.log(kSortedIds);
+  const kSortedIds = stableSort(mask, (a, b) => b.value - a.value).slice(0, k);
 
   return kSortedIds.map(({ idx }) => idx);
 }
