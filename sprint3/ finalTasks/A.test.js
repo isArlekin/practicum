@@ -27,5 +27,7 @@ describe('FindKInBrokenArray', () => {
     expect(brokenSearch([3, 1, 2], 2)).toBe(2);
     expect(brokenSearch([3, 1, 2], 3)).toBe(0);
     expect(brokenSearch([5, 1], 1)).toBe(1);
+    expect(brokenSearch([19, 21, 100, 101, 1, 4, 5, 7, 12], 5)).toBe(6);
+    expect(brokenSearch([9, 1, 3, 8], 8)).toBe(3);
   });
 });
