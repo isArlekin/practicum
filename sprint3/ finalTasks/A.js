@@ -1,43 +1,105 @@
+/*
+ * https://contest.yandex.ru/contest/23815/run-report/80120761/
+ *
+ * -- ПРИНЦИП РАБОТЫ --
+ * Начну с того, что изначально я пытался писать код, так как Вы рекомендовали ранее при сдаче прошлых работ.
+ * Считывание данных
+ * Подготовка данных
+ * Решение
+ * Вывод
+ * Было реализовано две функции findSubArray и binarySearch. Первая функция вовращала массив из двух элементов [startIndex, endIndex]
+ * Этот интервал использовался в функции binarySearch для поиска элемента. Все достаточно просто.
+ *
+ * Но, к сожалению, это решение не прошло по времени и мне пришлось слегка изменить подход и вызывать binarySearch  внутри функции поиска
+ * подмасива.
+ *
+ * Принцип работы остался тем же самым.
+ * Рекрусивно делим массив пополам. Получаем два подмасива следующего вида [start, middle) и [middle, end)
+ * Берем левую часть и смотрим является ли она отсортированным массивом.
+ * Если да,
+ * то проверяем, лежит ли искомый элемент внутри этого подмасива.
+ * Если лежит, то запускаем бинарный поиск на этот интервале. Если искомого элемента в этом подмассиве нет, то далее мы его
+ * не рассматриваем и переходим к правой части.
+ * Если левая часть не отсортирована,
+ * то снова вызываем функцию binarySearchInBrokenArray чтобы разделить массив дальше на две части.
+ * Базовым случаем является массив из одного элемента, он является отсортированным
+ *
+ * Если в левой части не оказалось искомого элемента то продолжаем поиск в правой делая все тоже самое.
+ * Если в обоих частях исходного массива искомого элемента не оказалось, то возвращаем -1.
+ *
+ * Отдельно отмечу, что функции binarySearch на вход подается подмасив в котором может находиться искомый элемент
+ * Если его нет, то binarySearch вернет -1 и следовательно функция binarySearchInBrokenArray тоже вернет -1
+ *
+ * -- ДОКАЗАТЕЛЬСТВО КОРРЕКТНОСТИ --
+ * В функции binarySearchInBrokenArray разбиение массива на подмассивы происходит до той степени, пока
+ * не найдется отсортировання последовательность или подмассив не будет состоять из одного элемента
+ * В обоих случаях можно определить стоит ли продолжать поиск в текущем подмассиве. Если нет (искомый элемент лежит за пределами всех подмассивов), то
+ * просто возвращаем -1 ,как результат поиска.
+ *
+ * Если такой подмассив обнаружен, то далее выполняется обычный бинарный поиск.
+ * -- ВРЕМЕННАЯ СЛОЖНОСТЬ --
+ * Для того, чтобы определить временную сложность всего алгоритма рассмотрим две основные функции в отдельности
+ *
+ * binarySearch
+ * Стандартная реализация итеративного бинарного поиска. Сложность O(log(n)). При каждой итерации цикла мы двигаем либо левую, либо
+ * правую границу в половину от текущий длины подмассива.
+ *
+ * binarySearchInBrokenArray
+ * Рекурсивно вызываем функцию пока либо не найдем интервал, в котором может находиться искомый элемент, либо пока не определим что ни в одном из
+ * интервалов искомого элемента быть не может.
+ * На каждом новом слое рекурссии входные данные уменьшены на половину. Тем самым достигается сложность O(log(n)), где n - количество элементов
+ * исходного массива.
+ *
+ * Общая временная сложность O(log(n)) + O(log(n)) ~ O(log(n))
+ *
+ * -- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
+ * Рассмотрим пространствунную сложность двух основных функций binarySearchInBrokenArray и binarySearch.
+ *
+ * Начнем с binarySearch
+ * Поскольку для реализации был выбран цикл, а не рекурсия то пространственная сложность O(1). Изначально я реализовал
+ * эту функция через рекурсию, но эта версия не прошла по времени, пришлось оптимизировать.
+ *
+ * Функция binarySearchInBrokenArray будет вызвана не более чем O(log(n)) раз, где n это длина исходного массива.
+ * На каждый новый уровень рекурсии тратится память, следовательно пространственная сложность этой функции O(log(n))
+ *
+ * И общая пространственная сложность алгоритма O(1) + O(log(n)) ~ O(log(n))
+ * */
 function brokenSearch(arr, k) {
-  if (arr.length === 0) {
-    return -1;
-  }
-
-  if (arr.length === 1) {
-    return arr[0] === k ? 0 : -1;
-  }
-
-  const [subArrStart, subArrEnd] = findSubArray(arr, k, 0, arr.length);
-
-  return binarySearch(arr, k, subArrStart, subArrEnd);
+  return binarySearchInBrokenArray(arr, k, 0, arr.length);
 }
 
-function findSubArray(array, k, start, end) {
+function binarySearchInBrokenArray(array, k, start, end) {
+  if (start >= end) {
+    return -1;
+  }
   const middle = findMiddle(start, end);
 
   if (isArraySorted(array, start, middle)) {
     if (isInArray(array, k, start, middle)) {
-      return [start, middle];
+      return binarySearch(array, k, start, middle);
     }
   } else {
-    const borders = findSubArray(array, k, start, middle);
-    if (borders[0] !== -1 && borders[1] !== -1) {
-      return borders;
+    const index = binarySearchInBrokenArray(array, k, start, middle);
+    if (index !== -1) {
+      return index;
     }
   }
 
   if (isArraySorted(array, middle, end)) {
     if (isInArray(array, k, middle, end)) {
-      return [middle, end];
+      return binarySearch(array, k, middle, end);
     }
   } else {
-    return findSubArray(array, k, middle, end);
+    return binarySearchInBrokenArray(array, k, middle, end);
   }
 
-  return [-1, -1];
+  return -1;
 }
 
 function isArraySorted(array, start, end) {
+  if (start === end) {
+    return false;
+  }
   return array[end - 1] >= array[start];
 }
 
@@ -45,22 +107,21 @@ function isInArray(array, k, start, end) {
   return k >= array[start] && k <= array[end - 1];
 }
 
-function binarySearch(arr, k, start, end) {
-  let l = start;
-  let r = end - 1;
-  let mid;
+function binarySearch(array, k, start, end) {
+  let left = start;
+  let right = end;
 
-  while (r >= l) {
-    mid = l + Math.floor((r - l) / 2);
+  while (left < right) {
+    const middle = findMiddle(left, right);
 
-    if (arr[mid] === k) {
-      return mid;
+    if (array[middle] === k) {
+      return middle;
     }
 
-    if (arr[mid] > k) {
-      r = mid - 1;
+    if (array[middle] > k) {
+      right = middle;
     } else {
-      l = mid + 1;
+      left = middle + 1;
     }
   }
 
@@ -70,16 +131,5 @@ function binarySearch(arr, k, start, end) {
 function findMiddle(start, end) {
   return Math.floor((start + end) / 2);
 }
-
-// function test() {
-//   const arr = [9, 1, 3, 8];
-//   const index = brokenSearch(arr, 8);
-//
-//   if (index > -1) {
-//     console.error(`Found at - ${index}`);
-//   } else {
-//     console.log('Not Found');
-//   }
-// }
 
 module.exports = brokenSearch;
