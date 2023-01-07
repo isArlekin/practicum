@@ -1,5 +1,4 @@
-// [start, end)
-function inPlaceQuickSort(arr) {
+function inPlaceQuickSort(arr, compare = (a, b) => a - b) {
   recursiveInPlaceQuickSort(0, arr.length - 1);
 
   function recursiveInPlaceQuickSort(start, end) {
@@ -14,11 +13,11 @@ function inPlaceQuickSort(arr) {
     while (leftP < rightP) {
       do {
         leftP++;
-      } while (arr[leftP] < pivot);
+      } while (compare(arr[leftP], pivot) < 0);
 
       do {
         rightP--;
-      } while (arr[rightP] > pivot);
+      } while (compare(arr[rightP], pivot) > 0);
 
       if (leftP >= rightP) {
         break;
@@ -39,8 +38,6 @@ function test() {
 
   console.log(arr);
 }
-
-test();
 
 function quickSort(arr, compare = (a, b) => a <= b) {
   if (arr.length < 2) {
@@ -65,7 +62,6 @@ function quickSort(arr, compare = (a, b) => a <= b) {
   return [...quickSort(left, compare), pivot, ...quickSort(right, compare)];
 }
 
-// TODO write swap without using a temporal variable
 function swap(arr, leftP, rightP) {
   const temp = arr[rightP];
   arr[rightP] = arr[leftP];
