@@ -23,5 +23,8 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "mathjs": "^11.5.0"
   }
 }
