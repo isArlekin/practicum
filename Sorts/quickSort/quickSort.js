@@ -7,17 +7,17 @@ function inPlaceQuickSort(arr, compare = (a, b) => a - b) {
     }
     const pivotIndex = Math.floor((start + end) / 2);
     const pivot = arr[pivotIndex];
-    let leftP = start - 1;
-    let rightP = end + 1;
+    let leftP = start;
+    let rightP = end;
 
     while (leftP < rightP) {
-      do {
+      while (compare(arr[leftP], pivot) < 0) {
         leftP++;
-      } while (compare(arr[leftP], pivot) < 0);
+      }
 
-      do {
+      while (compare(arr[rightP], pivot) > 0) {
         rightP--;
-      } while (compare(arr[rightP], pivot) > 0);
+      }
 
       if (leftP >= rightP) {
         break;
@@ -38,6 +38,7 @@ function test() {
 
   console.log(arr);
 }
+test();
 
 function quickSort(arr, compare = (a, b) => a <= b) {
   if (arr.length < 2) {

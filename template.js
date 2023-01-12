@@ -12,6 +12,14 @@ ioInterface.on('close', solve);
 
 function solve() {}
 
+function readNumberArray() {
+  return readLine().split(' ').map(Number);
+}
+
+function readNumber() {
+  return Number(readLine());
+}
+
 function readLine() {
   return inputLines[currentLine++];
 }
